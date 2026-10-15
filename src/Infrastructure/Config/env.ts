@@ -9,7 +9,9 @@ const env = {
 
     jwtSecret: process.env.JWT_SECRET || "",
 
-    jwtExpiresIn: process.env.JWT_EXPIRES_IN || "1d"
+    jwtExpiresIn: process.env.JWT_EXPIRES_IN || "1d",
+
+    jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || "",
 };
 
 console.log(env)
@@ -22,4 +24,7 @@ if (!env.jwtSecret) {
     throw new Error("JWT_SECRET is not defined");
 }
 
+if (!env.jwtRefreshSecret) {
+    throw new Error("JWT_REFRESH_SECRET is not defined");
+}
 export default env;
