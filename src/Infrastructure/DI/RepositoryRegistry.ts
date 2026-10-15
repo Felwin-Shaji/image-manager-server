@@ -1,0 +1,13 @@
+import { container } from "tsyringe";
+import { MongoUserRepository } from "../Database/Repositories/MongoUserRepository";
+import { REPOSITORY_TOKENS } from "./Tokens/RepositoryTokens";
+
+export class RepositoryRegistry {
+    static register(): void {
+
+        container.register(
+            REPOSITORY_TOKENS.IUserRepository,
+            { useClass: MongoUserRepository }
+        );
+    }
+}

@@ -1,17 +1,31 @@
+import "reflect-metadata";
 import express from "express";
+
 import { connectDatabase } from "./Infrastructure/Database/MongoDB";
 import env from "./Infrastructure/Config/env";
+import { DependencyContainer } from "./Infrastructure/DI/DependencyContainer";
 
+import { loggerMiddleware } from "./InterfaceAdapters/Middleware/loggerMiddleware";
+import authRoutes from "./InterfaceAdapters/Routes/authRoutes";
+import { errorHandler } from "./InterfaceAdapters/Middleware/errorHandler";
 
 const app = express();
 
+// 1. Parse request bodies
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-    res.json({
-        message: "Image Manager Server is running"
-    });
-});
+// 2. Log requests
+app.use(loggerMiddleware);
+
+// 3. Register dependencies once
+DependencyContainer.registerDependencies();
+
+// 4. routes
+app.use("/api/auth", authRoutes);
+
+// 5. Handle errors after routes
+app.use(errorHandler);
 
 const startServer = async (): Promise<void> => {
     await connectDatabase();
@@ -21,4 +35,4 @@ const startServer = async (): Promise<void> => {
     });
 };
 
-startServer();
+void startServer();
