@@ -6,6 +6,7 @@ import env from "./Infrastructure/Config/env";
 
 import { loggerMiddleware } from "./InterfaceAdapters/Middleware/loggerMiddleware";
 import authRoutes from "./InterfaceAdapters/Routes/authRoutes";
+import imageRoutes from "./InterfaceAdapters/Routes/imageRoutes";
 import { errorHandler } from "./InterfaceAdapters/Middleware/errorHandler";
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(loggerMiddleware);
 
 // 3. routes (the resolver registers dependencies before resolving controllers)
 app.use("/api/auth", authRoutes);
+app.use("/api/images", imageRoutes);
 
 // 4. Handle errors after routes
 app.use(errorHandler);

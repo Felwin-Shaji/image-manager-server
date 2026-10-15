@@ -16,7 +16,7 @@ import { LoginUserUseCase } from "../src/Application/UseCases/Auth/LoginUserUseC
 import { User } from "../src/Domain/Entities/User";
 import { LoginUserController } from "../src/InterfaceAdapters/Controllers/Auth/LoginUserController";
 import { errorHandler } from "../src/InterfaceAdapters/Middleware/errorHandler";
-import { validateLoginRequest } from "../src/InterfaceAdapters/Middleware/validateLoginRequest";
+import { validateLoginRequest } from "../src/InterfaceAdapters/Middleware/Validation/validateLoginRequest";
 import { ControllerRegistry } from "../src/Infrastructure/DI/ControllerRegistry";
 import { CONTROLLER_TOKENS } from "../src/Infrastructure/DI/Tokens/ControllerTokens";
 import { REPOSITORY_TOKENS } from "../src/Infrastructure/DI/Tokens/RepositoryTokens";

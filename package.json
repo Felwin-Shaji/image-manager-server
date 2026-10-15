@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "test": "tsx --test test/login.test.ts",
+    "test": "tsx --test test/login.test.ts test/authentication.test.ts",
     "start": "node dist/server.js"
   },
   "keywords": [],
