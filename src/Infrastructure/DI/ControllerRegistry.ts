@@ -5,8 +5,10 @@ import { USECASE_TOKENS } from "./Tokens/UseCaseTokens";
 
 import { RegisterUserController } from "../../InterfaceAdapters/Controllers/Auth/RegisterUserController";
 import { LoginUserController } from "../../InterfaceAdapters/Controllers/Auth/LoginUserController";
+import { UploadImageController } from "../../InterfaceAdapters/Controllers/Images/UploadImageController";
 import type { IRegisterUserUseCase } from "../../Application/Interfaces/UseCases/IRegisterUserUseCase";
 import type { ILoginUserUseCase } from "../../Application/Interfaces/UseCases/ILoginUserUseCase";
+import type { IUploadImageUseCase } from "../../Application/Interfaces/UseCases/IUploadImageUseCase";
 
 export class ControllerRegistry {
     static register(): void {
@@ -35,6 +37,20 @@ export class ControllerRegistry {
                         );
 
                     return new LoginUserController(loginUserUseCase);
+                }
+            }
+        );
+
+        container.register<UploadImageController>(
+            CONTROLLER_TOKENS.UploadImageController,
+            {
+                useFactory: (dependencyContainer) => {
+                    const uploadImageUseCase =
+                        dependencyContainer.resolve<IUploadImageUseCase>(
+                            USECASE_TOKENS.IUploadImageUseCase
+                        );
+
+                    return new UploadImageController(uploadImageUseCase);
                 }
             }
         );

@@ -1,12 +1,15 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import "reflect-metadata";
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { container } from "tsyringe";
 
 import { AppError } from "../src/Application/Errors/AppError";
 import type { IJwtService } from "../src/Application/Interfaces/Services/IJwtService";
 import { errorHandler } from "../src/InterfaceAdapters/Middleware/errorHandler";
-import { createAuthenticateAccessToken } from "../src/InterfaceAdapters/Middleware/authenticateAccessToken";
+import { authenticate } from "../src/InterfaceAdapters/Middleware/authenticateAccessToken";
+import { SERVICE_TOKENS } from "../src/Infrastructure/DI/Tokens/ServiceTokens";
 
 interface MockResponse {
     statusCode: number;
@@ -55,7 +58,7 @@ const createJwtService = (): JwtServiceFixture => {
 };
 
 const createRequest = (authorization?: string): Request => ({
-    get: (name: string) => name.toLowerCase() === "authorization" ? authorization : undefined
+    headers: { authorization }
 } as unknown as Request);
 
 const createResponse = (): MockResponse => ({
@@ -75,6 +78,9 @@ const invokeMiddleware = (
     authorization: string | undefined,
     jwtService: IJwtService
 ): { request: Request; response: MockResponse; nextCalled: boolean; error: unknown } => {
+    container.reset();
+    container.register<IJwtService>(SERVICE_TOKENS.IJwtService, { useValue: jwtService });
+
     const request = createRequest(authorization);
     const response = createResponse();
     let nextCalled = false;
@@ -87,16 +93,13 @@ const invokeMiddleware = (
         }
     };
 
-    createAuthenticateAccessToken(jwtService)(
-        request,
-        response as unknown as Response,
-        next
-    );
+    authenticate(request, response as unknown as Response, next);
 
     if (error !== undefined) {
         errorHandler(error, request, response as unknown as Response, next);
     }
 
+    container.reset();
     return { request, response, nextCalled, error };
 };
 
