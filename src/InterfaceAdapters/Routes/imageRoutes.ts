@@ -1,15 +1,18 @@
 import { Router } from "express";
+import { uploadImageController } from "../../Infrastructure/DI/Resolver";
+import { asyncHandler } from "../Middleware/asyncHandler";
 import { authenticate } from "../Middleware/authenticateAccessToken";
+import { parseImageUpload } from "../Middleware/parseImageUpload";
+import { validateImageUpload } from "../Middleware/Validation/validateImageUpload";
 
 const router = Router();
 
-// Example of applying authentication to an individual image route.
-router.get("/example", authenticate, (req, res): void => {
-    res.status(200).json({
-        success: true,
-        message: "Authenticated image route example",
-        userId: req.auth?.userId
-    });
-});
+router.post(
+    "/upload",
+    authenticate,
+    parseImageUpload,
+    validateImageUpload,
+    asyncHandler(uploadImageController.handle)
+);
 
 export default router;
