@@ -14,8 +14,6 @@ const env = {
     jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || "",
 };
 
-console.log(env)
-
 if (!env.mongoUri) {
     throw new Error("MONGO_URI is not defined");
 }

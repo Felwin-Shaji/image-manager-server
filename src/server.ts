@@ -3,7 +3,6 @@ import express from "express";
 
 import { connectDatabase } from "./Infrastructure/Database/MongoDB";
 import env from "./Infrastructure/Config/env";
-import { DependencyContainer } from "./Infrastructure/DI/DependencyContainer";
 
 import { loggerMiddleware } from "./InterfaceAdapters/Middleware/loggerMiddleware";
 import authRoutes from "./InterfaceAdapters/Routes/authRoutes";
@@ -18,13 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 // 2. Log requests
 app.use(loggerMiddleware);
 
-// 3. Register dependencies once
-DependencyContainer.registerDependencies();
-
-// 4. routes
+// 3. routes (the resolver registers dependencies before resolving controllers)
 app.use("/api/auth", authRoutes);
 
-// 5. Handle errors after routes
+// 4. Handle errors after routes
 app.use(errorHandler);
 
 const startServer = async (): Promise<void> => {
