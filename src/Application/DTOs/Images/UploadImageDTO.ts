@@ -25,3 +25,17 @@ export interface UploadImageOutputDTO {
 export interface BulkUploadImageRequestBody {
     titles: string[];
 }
+
+
+export interface ImageOutputDTO {
+    id: string;
+    title: string;
+    order: number;
+    secureUrl: string;
+    format: string;
+    bytes: number;
+    width: number;
+    height: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+}

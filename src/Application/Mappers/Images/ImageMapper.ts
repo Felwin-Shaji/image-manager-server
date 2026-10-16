@@ -1,4 +1,5 @@
-import type { UploadImageOutputDTO } from "../../DTOs/Images/UploadImageDTO";
+
+import type { ImageOutputDTO, UploadImageOutputDTO } from "../../DTOs/Images/UploadImageDTO";
 import type { ImageStorageResult } from "../../Interfaces/Services/IImageStorageService";
 import { Image } from "../../../Domain/Entities/Image";
 
@@ -19,11 +20,11 @@ export class ImageMapper {
             bytes: input.storageResult.bytes,
             width: input.storageResult.width,
             height: input.storageResult.height,
-            order: input.order
+            order: input.order,
         });
     }
 
-    static toUploadOutputDTO(image: Image & { id: string }): UploadImageOutputDTO {
+    static toOutputDTO(image: Image & { id: string }): ImageOutputDTO {
         return {
             id: image.id,
             title: image.title,
@@ -34,7 +35,13 @@ export class ImageMapper {
             width: image.width,
             height: image.height,
             ...(image.createdAt && { createdAt: image.createdAt }),
-            ...(image.updatedAt && { updatedAt: image.updatedAt })
+            ...(image.updatedAt && { updatedAt: image.updatedAt }),
         };
+    }
+
+    static toUploadOutputDTO(
+        image: Image & { id: string },
+    ): UploadImageOutputDTO {
+        return this.toOutputDTO(image);
     }
 }

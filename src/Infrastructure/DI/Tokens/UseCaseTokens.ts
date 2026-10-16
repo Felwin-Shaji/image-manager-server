@@ -1,5 +1,7 @@
 export const USECASE_TOKENS = {
     IRegisterUserUseCase: "IRegisterUserUseCase",
     ILoginUserUseCase: "ILoginUserUseCase",
-    IUploadImageUseCase: "IUploadImageUseCase"
+    IRefreshTokenUseCase: "IRefreshTokenUseCase",
+    IUploadImageUseCase: "IUploadImageUseCase",
+    IGetUserImagesUseCase: "IGetUserImagesUseCase",
 } as const;

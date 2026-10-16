@@ -5,9 +5,13 @@ import { RegisterUserController } from "../../InterfaceAdapters/Controllers/Auth
 import { LoginUserController } from "../../InterfaceAdapters/Controllers/Auth/LoginUserController";
 import { UploadImageController } from "../../InterfaceAdapters/Controllers/Images/UploadImageController";
 import { CONTROLLER_TOKENS } from "./Tokens/ControllerTokens";
+import { GetUserImagesController } from "../../InterfaceAdapters/Controllers/Images/GetUserImagesController";
+import { RefreshTokenController } from "../../InterfaceAdapters/Controllers/Auth/RefreshTokenController";
 
 DependencyContainer.registerDependencies();
 
 export const registerUserController = container.resolve<RegisterUserController>(CONTROLLER_TOKENS.RegisterUserController);
 export const loginUserController = container.resolve<LoginUserController>(CONTROLLER_TOKENS.LoginUserController);
 export const uploadImageController = container.resolve<UploadImageController>(CONTROLLER_TOKENS.UploadImageController);
+export const getUserImagesController = container.resolve<GetUserImagesController>(CONTROLLER_TOKENS.GetUserImagesController);
+export const refreshTokenController = container.resolve<RefreshTokenController>(CONTROLLER_TOKENS.RefreshTokenController);

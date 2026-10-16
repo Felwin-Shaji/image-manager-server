@@ -8,10 +8,22 @@ import { loggerMiddleware } from "./InterfaceAdapters/Middleware/loggerMiddlewar
 import authRoutes from "./InterfaceAdapters/Routes/authRoutes";
 import imageRoutes from "./InterfaceAdapters/Routes/imageRoutes";
 import { errorHandler } from "./InterfaceAdapters/Middleware/errorHandler";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
+    })
+);
+
 // 1. Parse request bodies
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
