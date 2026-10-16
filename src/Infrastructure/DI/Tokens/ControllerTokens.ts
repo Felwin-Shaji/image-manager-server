@@ -1,5 +1,7 @@
 export const CONTROLLER_TOKENS = {
     RegisterUserController: "RegisterUserController",
     LoginUserController: "LoginUserController",
-    UploadImageController: "UploadImageController"
+    RefreshTokenController: "RefreshTokenController",
+    UploadImageController: "UploadImageController",
+    GetUserImagesController: "GetUserImagesController",
 } as const;

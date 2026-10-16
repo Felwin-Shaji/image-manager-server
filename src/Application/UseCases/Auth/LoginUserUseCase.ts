@@ -26,7 +26,7 @@ export class LoginUserUseCase implements ILoginUserUseCase {
         );
 
         if (!passwordMatches) {
-            throw new AppError("Invalid email or password", 401);
+            throw new AppError("Invalid password", 401);
         }
 
         if (!user.id) {

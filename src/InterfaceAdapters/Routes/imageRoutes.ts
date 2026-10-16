@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { uploadImageController } from "../../Infrastructure/DI/Resolver";
+import { getUserImagesController, uploadImageController } from "../../Infrastructure/DI/Resolver";
 import { asyncHandler } from "../Middleware/asyncHandler";
 import { authenticate } from "../Middleware/authenticateAccessToken";
 import { parseImageUpload } from "../Middleware/parseImageUpload";
@@ -13,6 +13,12 @@ router.post(
     parseImageUpload,
     validateImageUpload,
     asyncHandler(uploadImageController.handle)
+);
+
+router.get(
+    "/",
+    authenticate,
+    asyncHandler(getUserImagesController.handle),
 );
 
 export default router;

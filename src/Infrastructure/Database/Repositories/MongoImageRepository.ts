@@ -3,6 +3,7 @@ import { Image } from "../../../Domain/Entities/Image";
 import { ImageModel } from "../Models/ImageModel";
 
 export class MongoImageRepository implements IImageRepository {
+
     async getNextOrder(ownerId: string): Promise<number> {
         const lastImage = await ImageModel.findOne({ ownerId })
             .sort({ order: -1 })
@@ -24,7 +25,39 @@ export class MongoImageRepository implements IImageRepository {
             height: image.height,
             order: image.order
         });
+        return this.toDomain(document);
+    }
 
+
+    async deleteById(id: string, ownerId: string): Promise<void> {
+        await ImageModel.deleteOne({
+            _id: id,
+            ownerId,
+        });
+    };
+
+    async findByOwnerId(ownerId: string): Promise<Image[]> {
+        const documents = await ImageModel.find({ ownerId })
+            .sort({ order: 1 })
+            .lean();
+
+        return documents.map((document) => this.toDomain(document));
+    }
+
+    private toDomain(document: {
+        _id: { toString(): string };
+        ownerId: { toString(): string };
+        title: string;
+        publicId: string;
+        secureUrl: string;
+        format: string;
+        bytes: number;
+        width: number;
+        height: number;
+        order: number;
+        createdAt?: Date;
+        updatedAt?: Date;
+    }): Image {
         return new Image({
             id: document._id.toString(),
             ownerId: document.ownerId.toString(),
@@ -37,16 +70,8 @@ export class MongoImageRepository implements IImageRepository {
             height: document.height,
             order: document.order,
             createdAt: document.createdAt,
-            updatedAt: document.updatedAt
+            updatedAt: document.updatedAt,
         });
     }
-
-
-    async deleteById(id: string, ownerId: string): Promise<void> {
-        await ImageModel.deleteOne({
-            _id: id,
-            ownerId,
-        });
-    };
 
 }

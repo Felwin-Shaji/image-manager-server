@@ -9,6 +9,10 @@ import { UploadImageController } from "../../InterfaceAdapters/Controllers/Image
 import type { IRegisterUserUseCase } from "../../Application/Interfaces/UseCases/IRegisterUserUseCase";
 import type { ILoginUserUseCase } from "../../Application/Interfaces/UseCases/ILoginUserUseCase";
 import type { IUploadImageUseCase } from "../../Application/Interfaces/UseCases/IUploadImageUseCase";
+import { GetUserImagesController } from "../../InterfaceAdapters/Controllers/Images/GetUserImagesController";
+import { IGetUserImagesUseCase } from "../../Application/Interfaces/UseCases/IGetUserImagesUseCase";
+import { RefreshTokenController } from "../../InterfaceAdapters/Controllers/Auth/RefreshTokenController";
+import { IRefreshTokenUseCase } from "../../Application/Interfaces/UseCases/IRefreshTokenUseCase";
 
 export class ControllerRegistry {
     static register(): void {
@@ -54,6 +58,36 @@ export class ControllerRegistry {
                 }
             }
         );
+
+        container.register<GetUserImagesController>(
+            CONTROLLER_TOKENS.GetUserImagesController,
+            {
+                useFactory: (dependencyContainer) => {
+                    const getUserImagesUseCase =
+                        dependencyContainer.resolve<IGetUserImagesUseCase>(
+                            USECASE_TOKENS.IGetUserImagesUseCase,
+                        );
+
+                    return new GetUserImagesController(getUserImagesUseCase);
+                },
+            },
+        );
+
+
+        container.register<RefreshTokenController>(
+            CONTROLLER_TOKENS.RefreshTokenController,
+            {
+                useFactory: (dependencyContainer) => {
+                    const refreshTokenUseCase =
+                        dependencyContainer.resolve<IRefreshTokenUseCase>(
+                            USECASE_TOKENS.IRefreshTokenUseCase,
+                        );
+
+                    return new RefreshTokenController(refreshTokenUseCase);
+                },
+            },
+        );
+
 
     }
 }

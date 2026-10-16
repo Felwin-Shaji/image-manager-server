@@ -13,6 +13,10 @@ import type { IUploadImageUseCase } from "../../Application/Interfaces/UseCases/
 import { USECASE_TOKENS } from "./Tokens/UseCaseTokens";
 import { REPOSITORY_TOKENS } from "./Tokens/RepositoryTokens";
 import { SERVICE_TOKENS } from "./Tokens/ServiceTokens";
+import { IGetUserImagesUseCase } from "../../Application/Interfaces/UseCases/IGetUserImagesUseCase";
+import { GetUserImagesUseCase } from "../../Application/UseCases/Images/GetUserImagesUseCase";
+import { IRefreshTokenUseCase } from "../../Application/Interfaces/UseCases/IRefreshTokenUseCase";
+import { RefreshTokenUseCase } from "../../Application/UseCases/Auth/RefreshTokenUseCase";
 
 export class UseCaseRegistry {
     static register(): void {
@@ -67,6 +71,44 @@ export class UseCaseRegistry {
                 }
             }
         );
+
+        container.register<IGetUserImagesUseCase>(
+            USECASE_TOKENS.IGetUserImagesUseCase,
+            {
+                useFactory: (dependencyContainer) => {
+                    const imageRepository =
+                        dependencyContainer.resolve<IImageRepository>(
+                            REPOSITORY_TOKENS.IImageRepository,
+                        );
+
+                    return new GetUserImagesUseCase(imageRepository);
+                },
+            },
+        );
+
+
+        container.register<IRefreshTokenUseCase>(
+            USECASE_TOKENS.IRefreshTokenUseCase,
+            {
+                useFactory: (dependencyContainer) => {
+                    const userRepository =
+                        dependencyContainer.resolve<IUserRepository>(
+                            REPOSITORY_TOKENS.IUserRepository,
+                        );
+
+                    const jwtService =
+                        dependencyContainer.resolve<IJwtService>(
+                            SERVICE_TOKENS.IJwtService,
+                        );
+
+                    return new RefreshTokenUseCase(
+                        userRepository,
+                        jwtService,
+                    );
+                },
+            },
+        );
+
 
     }
 }
