@@ -9,6 +9,11 @@ export interface ReplaceImageData {
     height: number;
 }
 
+export interface ImageOrderUpdate {
+    imageId: string;
+    order: number;
+}
+
 export interface IImageRepository {
     getNextOrder(ownerId: string): Promise<number>;
     create(image: Image): Promise<Image>;
@@ -17,4 +22,6 @@ export interface IImageRepository {
     findByImageId(imageId: string): Promise<Image | null>;
     updateTitleById(id: string, ownerId: string, title: string): Promise<Image | null>;
     replaceImageById(id: string, ownerId: string, image: ReplaceImageData,): Promise<Image | null>;
+    updateImageOrder(ownerId: string, imageOrders: ImageOrderUpdate[],): Promise<void>;
+
 }

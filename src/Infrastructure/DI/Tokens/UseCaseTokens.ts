@@ -7,4 +7,5 @@ export const USECASE_TOKENS = {
     IUpdateImageTitleUseCase: "IUpdateImageTitleUseCase",
     IReplaceImageUseCase: "IReplaceImageUseCase",
     IDeleteImageUseCase: "IDeleteImageUseCase",
+    IUpdateImageOrderUseCase: "IUpdateImageOrderUseCase",
 } as const;

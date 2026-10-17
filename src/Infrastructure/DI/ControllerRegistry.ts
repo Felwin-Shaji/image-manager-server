@@ -19,6 +19,8 @@ import { ReplaceImageController } from "../../InterfaceAdapters/Controllers/Imag
 import { IReplaceImageUseCase } from "../../Application/Interfaces/UseCases/IReplaceImageUseCase";
 import { DeleteImageController } from "../../InterfaceAdapters/Controllers/Images/DeleteImageController";
 import { IDeleteImageUseCase } from "../../Application/Interfaces/UseCases/IDeleteImageUseCase";
+import { UpdateImageOrderController } from "../../InterfaceAdapters/Controllers/Images/UpdateImageOrderController";
+import { IUpdateImageOrderUseCase } from "../../Application/Interfaces/UseCases/IUpdateImageOrderUseCase";
 
 export class ControllerRegistry {
     static register(): void {
@@ -132,6 +134,22 @@ export class ControllerRegistry {
                         );
 
                     return new DeleteImageController(deleteImageUseCase);
+                },
+            },
+        );
+
+        container.register<UpdateImageOrderController>(
+            CONTROLLER_TOKENS.UpdateImageOrderController,
+            {
+                useFactory: (dependencyContainer) => {
+                    const updateImageOrderUseCase =
+                        dependencyContainer.resolve<IUpdateImageOrderUseCase>(
+                            USECASE_TOKENS.IUpdateImageOrderUseCase,
+                        );
+
+                    return new UpdateImageOrderController(
+                        updateImageOrderUseCase,
+                    );
                 },
             },
         );

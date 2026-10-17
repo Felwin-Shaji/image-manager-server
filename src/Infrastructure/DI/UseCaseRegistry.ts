@@ -23,6 +23,8 @@ import { IReplaceImageUseCase } from "../../Application/Interfaces/UseCases/IRep
 import { ReplaceImageUseCase } from "../../Application/UseCases/Images/ReplaceImageUseCase";
 import { IDeleteImageUseCase } from "../../Application/Interfaces/UseCases/IDeleteImageUseCase";
 import { DeleteImageUseCase } from "../../Application/UseCases/Images/DeleteImageUseCase";
+import { IUpdateImageOrderUseCase } from "../../Application/Interfaces/UseCases/IUpdateImageOrderUseCase";
+import { UpdateImageOrderUseCase } from "../../Application/UseCases/Images/UpdateImageOrderUseCase";
 
 export class UseCaseRegistry {
     static register(): void {
@@ -173,6 +175,19 @@ export class UseCaseRegistry {
             },
         );
 
+        container.register<IUpdateImageOrderUseCase>(
+            USECASE_TOKENS.IUpdateImageOrderUseCase,
+            {
+                useFactory: (dependencyContainer) => {
+                    const imageRepository =
+                        dependencyContainer.resolve<IImageRepository>(
+                            REPOSITORY_TOKENS.IImageRepository,
+                        );
+
+                    return new UpdateImageOrderUseCase(imageRepository);
+                },
+            },
+        );
 
     }
 }

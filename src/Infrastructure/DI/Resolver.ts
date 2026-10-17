@@ -10,14 +10,17 @@ import { RefreshTokenController } from "../../InterfaceAdapters/Controllers/Auth
 import { UpdateImageTitleController } from "../../InterfaceAdapters/Controllers/Images/UpdateImageTitleController";
 import { ReplaceImageController } from "../../InterfaceAdapters/Controllers/Images/ReplaceImageController";
 import { DeleteImageController } from "../../InterfaceAdapters/Controllers/Images/DeleteImageController";
+import { UpdateImageOrderController } from "../../InterfaceAdapters/Controllers/Images/UpdateImageOrderController";
 
 DependencyContainer.registerDependencies();
 
 export const registerUserController = container.resolve<RegisterUserController>(CONTROLLER_TOKENS.RegisterUserController);
 export const loginUserController = container.resolve<LoginUserController>(CONTROLLER_TOKENS.LoginUserController);
+export const refreshTokenController = container.resolve<RefreshTokenController>(CONTROLLER_TOKENS.RefreshTokenController);
+
 export const uploadImageController = container.resolve<UploadImageController>(CONTROLLER_TOKENS.UploadImageController);
 export const getUserImagesController = container.resolve<GetUserImagesController>(CONTROLLER_TOKENS.GetUserImagesController);
-export const refreshTokenController = container.resolve<RefreshTokenController>(CONTROLLER_TOKENS.RefreshTokenController);
 export const updateImageTitleController = container.resolve<UpdateImageTitleController>(CONTROLLER_TOKENS.UpdateImageTitleController);
 export const replaceImageController = container.resolve<ReplaceImageController>(CONTROLLER_TOKENS.ReplaceImageController,);
 export const deleteImageController = container.resolve<DeleteImageController>(CONTROLLER_TOKENS.DeleteImageController,);
+export const updateImageOrderController = container.resolve<UpdateImageOrderController>(CONTROLLER_TOKENS.UpdateImageOrderController,);
