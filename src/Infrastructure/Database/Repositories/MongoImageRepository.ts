@@ -1,4 +1,4 @@
-import type { IImageRepository } from "../../../Application/Interfaces/Repositories/IImageRepository";
+import type { IImageRepository, ReplaceImageData } from "../../../Application/Interfaces/Repositories/IImageRepository";
 import { Image } from "../../../Domain/Entities/Image";
 import { ImageModel } from "../Models/ImageModel";
 
@@ -43,6 +43,63 @@ export class MongoImageRepository implements IImageRepository {
 
         return documents.map((document) => this.toDomain(document));
     }
+
+    async findByImageId(imageId: string): Promise<Image | null> {
+        const document = await ImageModel.findOne({ _id: imageId }).lean();
+
+        if (!document) {
+            return null;
+        }
+
+        return this.toDomain(document);
+    }
+
+
+    async updateTitleById(id: string, ownerId: string, title: string): Promise<Image | null> {
+
+        const document = await ImageModel.findOneAndUpdate(
+            { _id: id, ownerId },
+            { $set: { title } },
+            { new: true, runValidators: true }
+        ).lean();
+
+        if (!document) {
+            return null;
+        }
+
+        return this.toDomain(document);
+    }
+
+    async replaceImageById(
+        id: string,
+        ownerId: string,
+        image: ReplaceImageData,
+    ): Promise<Image | null> {
+        const document = await ImageModel.findOneAndUpdate(
+            { _id: id, ownerId },
+            {
+                $set: {
+                    publicId: image.publicId,
+                    secureUrl: image.secureUrl,
+                    format: image.format,
+                    bytes: image.bytes,
+                    width: image.width,
+                    height: image.height,
+                },
+            },
+            {
+                returnDocument: "after",
+                runValidators: true,
+            },
+        ).lean();
+
+        if (!document) {
+            return null;
+        }
+
+        return this.toDomain(document);
+    }
+
 
     private toDomain(document: {
         _id: { toString(): string };

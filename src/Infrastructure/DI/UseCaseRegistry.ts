@@ -17,6 +17,12 @@ import { IGetUserImagesUseCase } from "../../Application/Interfaces/UseCases/IGe
 import { GetUserImagesUseCase } from "../../Application/UseCases/Images/GetUserImagesUseCase";
 import { IRefreshTokenUseCase } from "../../Application/Interfaces/UseCases/IRefreshTokenUseCase";
 import { RefreshTokenUseCase } from "../../Application/UseCases/Auth/RefreshTokenUseCase";
+import { IUpdateImageTitleUseCase } from "../../Application/Interfaces/UseCases/IUpdateImageTitleUseCase";
+import { UpdateImageTitleUseCase } from "../../Application/UseCases/Images/UpdateImageTitleUseCase";
+import { IReplaceImageUseCase } from "../../Application/Interfaces/UseCases/IReplaceImageUseCase";
+import { ReplaceImageUseCase } from "../../Application/UseCases/Images/ReplaceImageUseCase";
+import { IDeleteImageUseCase } from "../../Application/Interfaces/UseCases/IDeleteImageUseCase";
+import { DeleteImageUseCase } from "../../Application/UseCases/Images/DeleteImageUseCase";
 
 export class UseCaseRegistry {
     static register(): void {
@@ -104,6 +110,64 @@ export class UseCaseRegistry {
                     return new RefreshTokenUseCase(
                         userRepository,
                         jwtService,
+                    );
+                },
+            },
+        );
+
+        container.register<IUpdateImageTitleUseCase>(
+            USECASE_TOKENS.IUpdateImageTitleUseCase,
+            {
+                useFactory: (dependencyContainer) => {
+                    const imageRepository =
+                        dependencyContainer.resolve<IImageRepository>(
+                            REPOSITORY_TOKENS.IImageRepository,
+                        );
+
+                    return new UpdateImageTitleUseCase(imageRepository);
+                },
+            },
+        );
+
+        container.register<IReplaceImageUseCase>(
+            USECASE_TOKENS.IReplaceImageUseCase,
+            {
+                useFactory: (dependencyContainer) => {
+                    const imageRepository =
+                        dependencyContainer.resolve<IImageRepository>(
+                            REPOSITORY_TOKENS.IImageRepository,
+                        );
+
+                    const imageStorageService =
+                        dependencyContainer.resolve<IImageStorageService>(
+                            SERVICE_TOKENS.IImageStorageService,
+                        );
+
+                    return new ReplaceImageUseCase(
+                        imageRepository,
+                        imageStorageService,
+                    );
+                },
+            },
+        );
+
+        container.register<IDeleteImageUseCase>(
+            USECASE_TOKENS.IDeleteImageUseCase,
+            {
+                useFactory: (dependencyContainer) => {
+                    const imageRepository =
+                        dependencyContainer.resolve<IImageRepository>(
+                            REPOSITORY_TOKENS.IImageRepository,
+                        );
+
+                    const imageStorageService =
+                        dependencyContainer.resolve<IImageStorageService>(
+                            SERVICE_TOKENS.IImageStorageService,
+                        );
+
+                    return new DeleteImageUseCase(
+                        imageRepository,
+                        imageStorageService,
                     );
                 },
             },

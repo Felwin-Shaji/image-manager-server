@@ -13,6 +13,12 @@ import { GetUserImagesController } from "../../InterfaceAdapters/Controllers/Ima
 import { IGetUserImagesUseCase } from "../../Application/Interfaces/UseCases/IGetUserImagesUseCase";
 import { RefreshTokenController } from "../../InterfaceAdapters/Controllers/Auth/RefreshTokenController";
 import { IRefreshTokenUseCase } from "../../Application/Interfaces/UseCases/IRefreshTokenUseCase";
+import { UpdateImageTitleController } from "../../InterfaceAdapters/Controllers/Images/UpdateImageTitleController";
+import { IUpdateImageTitleUseCase } from "../../Application/Interfaces/UseCases/IUpdateImageTitleUseCase";
+import { ReplaceImageController } from "../../InterfaceAdapters/Controllers/Images/ReplaceImageController";
+import { IReplaceImageUseCase } from "../../Application/Interfaces/UseCases/IReplaceImageUseCase";
+import { DeleteImageController } from "../../InterfaceAdapters/Controllers/Images/DeleteImageController";
+import { IDeleteImageUseCase } from "../../Application/Interfaces/UseCases/IDeleteImageUseCase";
 
 export class ControllerRegistry {
     static register(): void {
@@ -84,6 +90,48 @@ export class ControllerRegistry {
                         );
 
                     return new RefreshTokenController(refreshTokenUseCase);
+                },
+            },
+        );
+
+        container.register<UpdateImageTitleController>(
+            CONTROLLER_TOKENS.UpdateImageTitleController,
+            {
+                useFactory: (dependencyContainer) => {
+                    const updateImageTitleUseCase =
+                        dependencyContainer.resolve<IUpdateImageTitleUseCase>(
+                            USECASE_TOKENS.IUpdateImageTitleUseCase
+                        );
+
+                    return new UpdateImageTitleController(updateImageTitleUseCase);
+                },
+            }
+        );
+
+        container.register<ReplaceImageController>(
+            CONTROLLER_TOKENS.ReplaceImageController,
+            {
+                useFactory: (dependencyContainer) => {
+                    const replaceImageUseCase =
+                        dependencyContainer.resolve<IReplaceImageUseCase>(
+                            USECASE_TOKENS.IReplaceImageUseCase,
+                        );
+
+                    return new ReplaceImageController(replaceImageUseCase);
+                },
+            },
+        );
+
+        container.register<DeleteImageController>(
+            CONTROLLER_TOKENS.DeleteImageController,
+            {
+                useFactory: (dependencyContainer) => {
+                    const deleteImageUseCase =
+                        dependencyContainer.resolve<IDeleteImageUseCase>(
+                            USECASE_TOKENS.IDeleteImageUseCase,
+                        );
+
+                    return new DeleteImageController(deleteImageUseCase);
                 },
             },
         );
