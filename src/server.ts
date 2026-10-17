@@ -15,6 +15,7 @@ const app = express();
 
 const allowedOrigins = [
     "http://localhost:5173",
+    "https://image-manager-client.vercel.app",
     process.env.FRONTEND_URL,
 ].filter((origin): origin is string => Boolean(origin));
 
