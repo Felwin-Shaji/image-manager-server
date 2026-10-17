@@ -7,6 +7,9 @@ import { UploadImageController } from "../../InterfaceAdapters/Controllers/Image
 import { CONTROLLER_TOKENS } from "./Tokens/ControllerTokens";
 import { GetUserImagesController } from "../../InterfaceAdapters/Controllers/Images/GetUserImagesController";
 import { RefreshTokenController } from "../../InterfaceAdapters/Controllers/Auth/RefreshTokenController";
+import { UpdateImageTitleController } from "../../InterfaceAdapters/Controllers/Images/UpdateImageTitleController";
+import { ReplaceImageController } from "../../InterfaceAdapters/Controllers/Images/ReplaceImageController";
+import { DeleteImageController } from "../../InterfaceAdapters/Controllers/Images/DeleteImageController";
 
 DependencyContainer.registerDependencies();
 
@@ -15,3 +18,6 @@ export const loginUserController = container.resolve<LoginUserController>(CONTRO
 export const uploadImageController = container.resolve<UploadImageController>(CONTROLLER_TOKENS.UploadImageController);
 export const getUserImagesController = container.resolve<GetUserImagesController>(CONTROLLER_TOKENS.GetUserImagesController);
 export const refreshTokenController = container.resolve<RefreshTokenController>(CONTROLLER_TOKENS.RefreshTokenController);
+export const updateImageTitleController = container.resolve<UpdateImageTitleController>(CONTROLLER_TOKENS.UpdateImageTitleController);
+export const replaceImageController = container.resolve<ReplaceImageController>(CONTROLLER_TOKENS.ReplaceImageController,);
+export const deleteImageController = container.resolve<DeleteImageController>(CONTROLLER_TOKENS.DeleteImageController,);
