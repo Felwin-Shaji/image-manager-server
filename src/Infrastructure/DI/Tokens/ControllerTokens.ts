@@ -7,4 +7,5 @@ export const CONTROLLER_TOKENS = {
     UpdateImageTitleController: "UpdateImageTitleController",
     ReplaceImageController: "ReplaceImageController",
     DeleteImageController: "DeleteImageController",
+    UpdateImageOrderController: "UpdateImageOrderController",
 } as const;

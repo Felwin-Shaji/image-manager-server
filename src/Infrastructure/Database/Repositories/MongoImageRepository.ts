@@ -1,4 +1,4 @@
-import type { IImageRepository, ReplaceImageData } from "../../../Application/Interfaces/Repositories/IImageRepository";
+import type { IImageRepository, ImageOrderUpdate, ReplaceImageData } from "../../../Application/Interfaces/Repositories/IImageRepository";
 import { Image } from "../../../Domain/Entities/Image";
 import { ImageModel } from "../Models/ImageModel";
 
@@ -100,6 +100,25 @@ export class MongoImageRepository implements IImageRepository {
         return this.toDomain(document);
     }
 
+    async updateImageOrder(ownerId: string, imageOrders: ImageOrderUpdate[],): Promise<void> {
+        if (imageOrders.length === 0) {
+            return;
+        }
+
+        await ImageModel.bulkWrite(
+            imageOrders.map(({ imageId, order }) => ({
+                updateOne: {
+                    filter: {
+                        _id: imageId,
+                        ownerId,
+                    },
+                    update: {
+                        $set: { order },
+                    },
+                },
+            })),
+        );
+    }
 
     private toDomain(document: {
         _id: { toString(): string };
