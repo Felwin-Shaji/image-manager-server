@@ -17,8 +17,8 @@ export class LoginUserController {
 
         res.cookie("refreshToken", result.refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            secure: true,
+            sameSite: "none",
             path: "/api/auth",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
