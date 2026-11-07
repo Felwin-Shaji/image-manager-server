@@ -3,6 +3,8 @@ import type { Request, Response } from "express";
 import type { ParamsDictionary } from "express-serve-static-core";
 import type { LoginUserInputDTO } from "../../../Application/DTOs/Auth/LoginUserDTO";
 import type { ILoginUserUseCase } from "../../../Application/Interfaces/UseCases/ILoginUserUseCase";
+import { STATUS_CODE } from "../../../Application/Constants/HttpStatusCode";
+import { AUTH_MESSAGES } from "../../../Application/Constants/Messages/AuthMessages";
 
 export class LoginUserController {
     constructor(
@@ -23,9 +25,9 @@ export class LoginUserController {
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
-        res.status(200).json({
+        res.status(STATUS_CODE.OK).json({
             success: true,
-            message: "Login successful",
+            message: AUTH_MESSAGES.LOGIN_SUCCESS,
             data: {
                 id: result.id,
                 email: result.email,

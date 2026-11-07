@@ -1,5 +1,7 @@
 import type { Request, Response } from "express";
 import type { IGetUserImagesUseCase } from "../../../Application/Interfaces/UseCases/IGetUserImagesUseCase";
+import { STATUS_CODE } from "../../../Application/Constants/HttpStatusCode";
+import { IMAGE_MESSAGES } from "../../../Application/Constants/Messages/ImageMessages";
 
 export class GetUserImagesController {
     constructor(
@@ -11,9 +13,9 @@ export class GetUserImagesController {
             req.auth!.userId,
         );
 
-        res.status(200).json({
+        res.status(STATUS_CODE.OK).json({
             success: true,
-            message: "Images retrieved successfully",
+            message: IMAGE_MESSAGES.IMAGES_RETRIEVED_SUCCESS,
             data: result,
         });
     };

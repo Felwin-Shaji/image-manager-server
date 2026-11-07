@@ -1,6 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 import { container } from "tsyringe";
 import { AppError } from "../../Application/Errors/AppError";
+import { STATUS_CODE } from "../../Application/Constants/HttpStatusCode";
+import { COMMON_MESSAGES } from "../../Application/Constants/Messages/CommonMessages";
 import type { IJwtService } from "../../Application/Interfaces/Services/IJwtService";
 import { SERVICE_TOKENS } from "../../Infrastructure/DI/Tokens/ServiceTokens";
 
@@ -15,7 +17,7 @@ export const authenticate = (
         const match = authorization?.match(/^Bearer +([^\s]+)$/i);
 
         if (!match) {
-            next(new AppError("Unauthorized", 401));
+            next(new AppError(COMMON_MESSAGES.UNAUTHORIZED, STATUS_CODE.UNAUTHORIZED));
             return;
         }
 
@@ -26,7 +28,7 @@ export const authenticate = (
         const user = jwtService.verifyAccessToken(match[1]);
 
         if (!user.userId) {
-            next(new AppError("Unauthorized", 401));
+            next(new AppError(COMMON_MESSAGES.UNAUTHORIZED, STATUS_CODE.UNAUTHORIZED));
             return;
         }
 
@@ -34,6 +36,6 @@ export const authenticate = (
 
         next();
     } catch (error) {
-        next(new AppError("Unauthorized", 401));
+        next(new AppError(COMMON_MESSAGES.UNAUTHORIZED, STATUS_CODE.UNAUTHORIZED));
     }
 };

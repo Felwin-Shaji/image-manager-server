@@ -1,4 +1,7 @@
 import { AppError } from "../../Errors/AppError";
+import { STATUS_CODE } from "../../Constants/HttpStatusCode";
+import { COMMON_MESSAGES } from "../../Constants/Messages/CommonMessages";
+import { IMAGE_MESSAGES } from "../../Constants/Messages/ImageMessages";
 import type { UpdateImageOrderInputDTO } from "../../DTOs/Images/UpdateImageOrderDTO";
 import type { IImageRepository } from "../../Interfaces/Repositories/IImageRepository";
 import type { IUpdateImageOrderUseCase } from "../../Interfaces/UseCases/IUpdateImageOrderUseCase";
@@ -10,14 +13,14 @@ export class UpdateImageOrderUseCase implements IUpdateImageOrderUseCase {
 
     async execute(input: UpdateImageOrderInputDTO): Promise<void> {
         const ownerId = input.ownerId.trim();
-        if (!ownerId) throw new AppError("Unable to identify image owner", 401);
+        if (!ownerId) throw new AppError(COMMON_MESSAGES.UNABLE_TO_IDENTIFY_IMAGE_OWNER, STATUS_CODE.UNAUTHORIZED);
 
 
         if (
             !Array.isArray(input.imageOrders) ||
             input.imageOrders.length === 0
         ) {
-            throw new AppError("Image order must not be empty", 400);
+            throw new AppError(IMAGE_MESSAGES.IMAGE_ORDER_REQUIRED, STATUS_CODE.BAD_REQUEST);
         }
 
         const imageIds = input.imageOrders.map((item) => item.imageId);
@@ -27,8 +30,8 @@ export class UpdateImageOrderUseCase implements IUpdateImageOrderUseCase {
             new Set(imageIds).size !== imageIds.length
         ) {
             throw new AppError(
-                "Image IDs must be valid and unique",
-                400,
+                IMAGE_MESSAGES.IMAGE_IDS_MUST_BE_VALID_AND_UNIQUE,
+                STATUS_CODE.BAD_REQUEST,
             );
         }
 
@@ -39,8 +42,8 @@ export class UpdateImageOrderUseCase implements IUpdateImageOrderUseCase {
             new Set(orders).size !== orders.length
         ) {
             throw new AppError(
-                "Image positions must be unique non-negative integers",
-                400,
+                IMAGE_MESSAGES.IMAGE_POSITIONS_MUST_BE_UNIQUE,
+                STATUS_CODE.BAD_REQUEST,
             );
         }
 
@@ -51,8 +54,8 @@ export class UpdateImageOrderUseCase implements IUpdateImageOrderUseCase {
             !userImages.every((image) => image.id !== null && imageIds.includes(image.id))
         ) {
             throw new AppError(
-                "The submitted order must contain all your images",
-                400,
+                IMAGE_MESSAGES.ORDER_MUST_INCLUDE_ALL_IMAGES,
+                STATUS_CODE.BAD_REQUEST,
             );
         }
 

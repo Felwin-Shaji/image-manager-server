@@ -1,4 +1,6 @@
 import { AppError } from "../../Errors/AppError";
+import { STATUS_CODE } from "../../Constants/HttpStatusCode";
+import { AUTH_MESSAGES } from "../../Constants/Messages/AuthMessages";
 import type { IUserRepository } from "../../Interfaces/Repositories/IUserRepository";
 import type { IJwtService } from "../../Interfaces/Services/IJwtService";
 import type { IPasswordService } from "../../Interfaces/Services/IPasswordService";
@@ -17,7 +19,7 @@ export class LoginUserUseCase implements ILoginUserUseCase {
         const user = await this.userRepository.findByEmail(email);
 
         if (!user) {
-            throw new AppError("Invalid email or password", 401);
+            throw new AppError(AUTH_MESSAGES.INVALID_CREDENTIALS, STATUS_CODE.UNAUTHORIZED);
         }
 
         const passwordMatches = await this.passwordService.compare(
@@ -26,11 +28,11 @@ export class LoginUserUseCase implements ILoginUserUseCase {
         );
 
         if (!passwordMatches) {
-            throw new AppError("Invalid password", 401);
+            throw new AppError(AUTH_MESSAGES.INVALID_PASSWORD, STATUS_CODE.UNAUTHORIZED);
         }
 
         if (!user.id) {
-            throw new AppError("Unable to complete login", 500);
+            throw new AppError(AUTH_MESSAGES.UNABLE_TO_COMPLETE_LOGIN, STATUS_CODE.INTERNAL_SERVER_ERROR);
         }
 
         return {

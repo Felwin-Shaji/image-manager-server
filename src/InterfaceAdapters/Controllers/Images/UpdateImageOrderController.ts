@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import type { ParamsDictionary } from "express-serve-static-core";
 import type { IUpdateImageOrderUseCase } from "../../../Application/Interfaces/UseCases/IUpdateImageOrderUseCase";
+import { STATUS_CODE } from "../../../Application/Constants/HttpStatusCode";
+import { IMAGE_MESSAGES } from "../../../Application/Constants/Messages/ImageMessages";
 
 interface UpdateImageOrderRequestBody {
     imageIds: string[];
@@ -25,9 +27,9 @@ export class UpdateImageOrderController {
             })),
         });
 
-        res.status(200).json({
+        res.status(STATUS_CODE.OK).json({
             success: true,
-            message: "Image order updated successfully",
+            message: IMAGE_MESSAGES.IMAGE_ORDER_UPDATE_SUCCESS,
         });
     };
 }

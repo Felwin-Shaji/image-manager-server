@@ -1,5 +1,8 @@
 
 import { AppError } from "../../Errors/AppError";
+import { STATUS_CODE } from "../../Constants/HttpStatusCode";
+import { COMMON_MESSAGES } from "../../Constants/Messages/CommonMessages";
+import { IMAGE_MESSAGES } from "../../Constants/Messages/ImageMessages";
 import type {
     UploadImageInputDTO,
     UploadImageOutputDTO,
@@ -24,7 +27,7 @@ export class UploadImageUseCase implements IUploadImageUseCase {
 
     async execute(input: UploadImageInputDTO,): Promise<UploadImageOutputDTO[]> {
         const userId = input.userId.trim();
-        if (!userId) throw new AppError("Unable to identify image owner", 401);
+        if (!userId) throw new AppError(COMMON_MESSAGES.UNABLE_TO_IDENTIFY_IMAGE_OWNER, STATUS_CODE.UNAUTHORIZED);
 
         if (
             !Array.isArray(input.images) ||
@@ -32,18 +35,18 @@ export class UploadImageUseCase implements IUploadImageUseCase {
             input.images.length > MAX_IMAGE_COUNT
         ) {
             throw new AppError(
-                `Upload between 1 and ${MAX_IMAGE_COUNT} images`,
-                400,
+                IMAGE_MESSAGES.IMAGE_COUNT_RANGE(MAX_IMAGE_COUNT),
+                STATUS_CODE.BAD_REQUEST,
             );
         }
 
         for (const image of input.images) {
-            if (!image.title.trim()) throw new AppError("Image title is required", 400);
+            if (!image.title.trim()) throw new AppError(IMAGE_MESSAGES.IMAGE_TITLE_REQUIRED, STATUS_CODE.BAD_REQUEST);
 
             if (image.title.trim().length > MAX_IMAGE_TITLE_LENGTH) {
                 throw new AppError(
-                    `Image title must not exceed ${MAX_IMAGE_TITLE_LENGTH} characters`,
-                    400,
+                    IMAGE_MESSAGES.IMAGE_TITLE_TOO_LONG(MAX_IMAGE_TITLE_LENGTH),
+                    STATUS_CODE.BAD_REQUEST,
                 );
             }
 
@@ -51,13 +54,13 @@ export class UploadImageUseCase implements IUploadImageUseCase {
                 !Buffer.isBuffer(image.file) ||
                 image.file.length === 0
             ) {
-                throw new AppError("Image file is required", 400);
+                throw new AppError(IMAGE_MESSAGES.IMAGE_FILE_REQUIRED, STATUS_CODE.BAD_REQUEST);
             }
 
             if (image.file.length > MAX_IMAGE_SIZE_BYTES) {
                 throw new AppError(
-                    "Image exceeds the 5 MB size limit",
-                    413,
+                    IMAGE_MESSAGES.IMAGE_SIZE_EXCEEDED(MAX_IMAGE_SIZE_BYTES / (1024 * 1024)),
+                    STATUS_CODE.PAYLOAD_TOO_LARGE,
                 );
             }
         }
@@ -90,8 +93,8 @@ export class UploadImageUseCase implements IUploadImageUseCase {
 
                 if (!isPersistedImage(createdImage)) {
                     throw new AppError(
-                        "Unable to save image metadata",
-                        500,
+                        IMAGE_MESSAGES.UNABLE_TO_SAVE_IMAGE_METADATA,
+                        STATUS_CODE.INTERNAL_SERVER_ERROR,
                     );
                 }
 

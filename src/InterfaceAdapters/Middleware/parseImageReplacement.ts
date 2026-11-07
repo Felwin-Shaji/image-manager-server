@@ -2,6 +2,8 @@
 import multer from "multer";
 import type { RequestHandler } from "express";
 import { AppError } from "../../Application/Errors/AppError";
+import { STATUS_CODE } from "../../Application/Constants/HttpStatusCode";
+import { IMAGE_MESSAGES } from "../../Application/Constants/Messages/ImageMessages";
 import { MAX_IMAGE_SIZE_BYTES } from "../../Application/Policies/ImageUploadPolicy";
 
 const upload = multer({
@@ -27,8 +29,8 @@ export const parseImageReplacement: RequestHandler = (
             if (error.code === "LIMIT_FILE_SIZE") {
                 next(
                     new AppError(
-                        `Image must not exceed ${MAX_IMAGE_SIZE_BYTES / (1024 * 1024)} MB`,
-                        400,
+                        IMAGE_MESSAGES.IMAGE_SIZE_LIMIT(MAX_IMAGE_SIZE_BYTES / (1024 * 1024)),
+                        STATUS_CODE.BAD_REQUEST,
                     ),
                 );
                 return;
@@ -40,14 +42,14 @@ export const parseImageReplacement: RequestHandler = (
             ) {
                 next(
                     new AppError(
-                        'Upload one replacement image using the "image" field',
-                        400,
+                        IMAGE_MESSAGES.UPLOAD_ONE_REPLACEMENT_IMAGE,
+                        STATUS_CODE.BAD_REQUEST,
                     ),
                 );
                 return;
             }
 
-            next(new AppError("Invalid image upload request", 400));
+            next(new AppError(IMAGE_MESSAGES.INVALID_IMAGE_UPLOAD_REQUEST, STATUS_CODE.BAD_REQUEST));
             return;
         }
 

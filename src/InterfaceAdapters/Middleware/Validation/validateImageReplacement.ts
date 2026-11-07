@@ -1,6 +1,8 @@
 
 import type { RequestHandler } from "express";
 import { AppError } from "../../../Application/Errors/AppError";
+import { STATUS_CODE } from "../../../Application/Constants/HttpStatusCode";
+import { IMAGE_MESSAGES } from "../../../Application/Constants/Messages/ImageMessages";
 import { validateImageMimeType } from "../../../Infrastructure/Utils/validateImageMimeType";
 
 export const validateImageReplacement: RequestHandler = async (
@@ -14,8 +16,8 @@ export const validateImageReplacement: RequestHandler = async (
         if (!file) {
             next(
                 new AppError(
-                    'A replacement image is required in the "image" field',
-                    400,
+                    IMAGE_MESSAGES.REPLACEMENT_IMAGE_FIELD_REQUIRED,
+                    STATUS_CODE.BAD_REQUEST,
                 ),
             );
             return;
@@ -25,7 +27,7 @@ export const validateImageReplacement: RequestHandler = async (
             !Buffer.isBuffer(file.buffer) ||
             file.buffer.length === 0
         ) {
-            next(new AppError("Invalid or empty image file", 400));
+            next(new AppError(IMAGE_MESSAGES.IMAGE_FILE_EMPTY_OR_INVALID, STATUS_CODE.BAD_REQUEST));
             return;
         }
 
@@ -35,7 +37,7 @@ export const validateImageReplacement: RequestHandler = async (
         );
 
         if (!isValidImage) {
-            next(new AppError("Unsupported image type", 400));
+            next(new AppError(IMAGE_MESSAGES.UNSUPPORTED_IMAGE_TYPE, STATUS_CODE.BAD_REQUEST));
             return;
         }
 

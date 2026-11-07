@@ -2,6 +2,8 @@
 import type { RequestHandler } from "express";
 import multer from "multer";
 import { AppError } from "../../Application/Errors/AppError";
+import { STATUS_CODE } from "../../Application/Constants/HttpStatusCode";
+import { IMAGE_MESSAGES } from "../../Application/Constants/Messages/ImageMessages";
 import { MAX_IMAGE_COUNT, MAX_IMAGE_SIZE_BYTES } from "../../Application/Policies/ImageUploadPolicy";
 
 
@@ -24,7 +26,14 @@ export const parseImageUpload: RequestHandler = (req, res, next): void => {
 
         if (error instanceof multer.MulterError) {
             if (error.code === "LIMIT_FILE_SIZE") {
-                next(new AppError("An image exceeds the 5 MB size limit", 413));
+                next(
+                    new AppError(
+                        IMAGE_MESSAGES.AN_IMAGE_SIZE_EXCEEDED(
+                            MAX_IMAGE_SIZE_BYTES / (1024 * 1024),
+                        ),
+                        STATUS_CODE.PAYLOAD_TOO_LARGE,
+                    ),
+                );
                 return;
             }
 
@@ -32,11 +41,16 @@ export const parseImageUpload: RequestHandler = (req, res, next): void => {
                 error.code === "LIMIT_FILE_COUNT" ||
                 error.code === "LIMIT_UNEXPECTED_FILE"
             ) {
-                next(new AppError("Maximum 10 images are allowed per request", 400));
+                next(
+                    new AppError(
+                        IMAGE_MESSAGES.MAXIMUM_IMAGES_PER_REQUEST(MAX_IMAGE_COUNT),
+                        STATUS_CODE.BAD_REQUEST,
+                    ),
+                );
                 return;
             }
 
-            next(new AppError("Invalid multipart image upload", 400));
+            next(new AppError(IMAGE_MESSAGES.INVALID_MULTIPART_UPLOAD, STATUS_CODE.BAD_REQUEST));
             return;
         }
 
@@ -45,6 +59,6 @@ export const parseImageUpload: RequestHandler = (req, res, next): void => {
             return;
         }
 
-        next(new AppError("Invalid multipart image upload", 400));
+        next(new AppError(IMAGE_MESSAGES.INVALID_MULTIPART_UPLOAD, STATUS_CODE.BAD_REQUEST));
     });
 };
