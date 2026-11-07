@@ -46,13 +46,13 @@ export class MongoUserRepository implements IUserRepository {
         document: InstanceType<typeof UserModel>,
         passwordOverride?: string
     ): User {
-        return new User({
-            id: document._id.toString(),
-            email: document.email,
-            phone: document.phone,
-            password: passwordOverride ?? document.password ?? "",
-            createdAt: document.createdAt,
-            updatedAt: document.updatedAt
-        });
+        return new User(
+            document._id.toString(),
+            document.email,
+            document.phone,
+            passwordOverride ?? document.password ?? "",
+            document.createdAt,
+            document.updatedAt
+        );
     }
 }
