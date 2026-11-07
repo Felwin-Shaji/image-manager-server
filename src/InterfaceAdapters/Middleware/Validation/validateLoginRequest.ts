@@ -1,5 +1,6 @@
 import type { LoginUserInputDTO } from "../../../Application/DTOs/Auth/LoginUserDTO";
 import { validateRequestBody } from "./validateRequestBody";
+import { AUTH_MESSAGES } from "../../../Application/Constants/Messages/AuthMessages";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -19,5 +20,5 @@ const isLoginUserInput = (body: unknown): body is LoginUserInputDTO => {
 
 export const validateLoginRequest = validateRequestBody(
     isLoginUserInput,
-    "Invalid login request"
+    AUTH_MESSAGES.INVALID_LOGIN_REQUEST
 );

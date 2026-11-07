@@ -1,5 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { AppError } from "../../../Application/Errors/AppError";
+import { STATUS_CODE } from "../../../Application/Constants/HttpStatusCode";
+import { IMAGE_MESSAGES } from "../../../Application/Constants/Messages/ImageMessages";
 
 interface UpdateImageOrderRequestBody {
     imageIds: string[];
@@ -21,15 +23,15 @@ export const validateImageOrder = (
         )
     ) {
         throw new AppError(
-            "A valid list of image IDs is required",
-            400,
+            IMAGE_MESSAGES.VALID_IMAGE_IDS_REQUIRED,
+            STATUS_CODE.BAD_REQUEST,
         );
     }
 
     if (new Set(imageIds).size !== imageIds.length) {
         throw new AppError(
-            "Duplicate image IDs are not allowed",
-            400,
+            IMAGE_MESSAGES.DUPLICATE_IMAGE_IDS,
+            STATUS_CODE.BAD_REQUEST,
         );
     }
 

@@ -1,5 +1,8 @@
 
 import { AppError } from "../../Errors/AppError";
+import { STATUS_CODE } from "../../Constants/HttpStatusCode";
+import { COMMON_MESSAGES } from "../../Constants/Messages/CommonMessages";
+import { IMAGE_MESSAGES } from "../../Constants/Messages/ImageMessages";
 import type { ImageOutputDTO } from "../../DTOs/Images/UploadImageDTO";
 import { ImageMapper } from "../../Mappers/Images/ImageMapper";
 import type { IImageRepository } from "../../Interfaces/Repositories/IImageRepository";
@@ -17,16 +20,16 @@ export class ReplaceImageUseCase implements IReplaceImageUseCase {
         const imageId = input.imageId.trim();
         const ownerId = input.ownerId.trim();
 
-        if (!imageId) throw new AppError("Image ID is required", 400);
+        if (!imageId) throw new AppError(IMAGE_MESSAGES.IMAGE_ID_REQUIRED, STATUS_CODE.BAD_REQUEST);
 
-        if (!ownerId) throw new AppError("Unable to identify image owner", 401);
+        if (!ownerId) throw new AppError(COMMON_MESSAGES.UNABLE_TO_IDENTIFY_IMAGE_OWNER, STATUS_CODE.UNAUTHORIZED);
         const userImages = await this.imageRepository.findByOwnerId(ownerId);
 
         const existingImage = userImages.find(
             (image) => image.id === imageId,
         );
 
-        if (!existingImage) throw new AppError("Image not found", 404);
+        if (!existingImage) throw new AppError(IMAGE_MESSAGES.IMAGE_NOT_FOUND, STATUS_CODE.NOT_FOUND);
         const oldPublicId = existingImage.publicId;
 
         const storageResult = await this.imageStorageService.upload(input.file,);
@@ -47,7 +50,7 @@ export class ReplaceImageUseCase implements IReplaceImageUseCase {
                 },
             );
 
-            if (!updatedImage) throw new AppError("Image not found", 404);
+            if (!updatedImage) throw new AppError(IMAGE_MESSAGES.IMAGE_NOT_FOUND, STATUS_CODE.NOT_FOUND);
 
         } catch (error: unknown) {
             try {
@@ -74,8 +77,8 @@ export class ReplaceImageUseCase implements IReplaceImageUseCase {
             !updatedImage.id
         ) {
             throw new AppError(
-                "Unable to retrieve the updated image",
-                500,
+                IMAGE_MESSAGES.UNABLE_TO_RETRIEVE_REPLACED_IMAGE,
+                STATUS_CODE.INTERNAL_SERVER_ERROR,
             );
         }
 

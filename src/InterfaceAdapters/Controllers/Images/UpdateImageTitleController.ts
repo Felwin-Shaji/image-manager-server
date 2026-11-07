@@ -4,6 +4,8 @@ import type { ParamsDictionary } from "express-serve-static-core";
 import type { UpdateImageTitleRequestBody } from "../../../Application/DTOs/Images/UpdateImageTitleDTO";
 import type { IUpdateImageTitleUseCase } from "../../../Application/Interfaces/UseCases/IUpdateImageTitleUseCase";
 import { AppError } from "../../../Application/Errors/AppError";
+import { STATUS_CODE } from "../../../Application/Constants/HttpStatusCode";
+import { IMAGE_MESSAGES } from "../../../Application/Constants/Messages/ImageMessages";
 
 export class UpdateImageTitleController {
     constructor(
@@ -17,7 +19,7 @@ export class UpdateImageTitleController {
         const imageId = req.params.id;
         
         if (typeof imageId !== "string" || !imageId.trim()) {
-            throw new AppError("Valid image ID is required", 400);
+            throw new AppError(IMAGE_MESSAGES.VALID_IMAGE_ID_REQUIRED, STATUS_CODE.BAD_REQUEST);
         }
 
         const result = await this.updateImageTitleUseCase.execute({
@@ -26,9 +28,9 @@ export class UpdateImageTitleController {
             title: req.body.title,
         });
 
-        res.status(200).json({
+        res.status(STATUS_CODE.OK).json({
             success: true,
-            message: "Image title updated successfully",
+            message: IMAGE_MESSAGES.IMAGE_TITLE_UPDATE_SUCCESS,
             data: result,
         });
     };

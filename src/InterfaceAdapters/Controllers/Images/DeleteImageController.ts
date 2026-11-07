@@ -3,6 +3,8 @@ import type { Request, Response } from "express";
 import type { ParamsDictionary } from "express-serve-static-core";
 import { AppError } from "../../../Application/Errors/AppError";
 import type { IDeleteImageUseCase } from "../../../Application/Interfaces/UseCases/IDeleteImageUseCase";
+import { STATUS_CODE } from "../../../Application/Constants/HttpStatusCode";
+import { IMAGE_MESSAGES } from "../../../Application/Constants/Messages/ImageMessages";
 
 export class DeleteImageController {
     constructor(
@@ -16,7 +18,7 @@ export class DeleteImageController {
         const imageId = req.params.id;
 
         if (typeof imageId !== "string" || !imageId.trim()) {
-            throw new AppError("Valid image ID is required", 400);
+            throw new AppError(IMAGE_MESSAGES.VALID_IMAGE_ID_REQUIRED, STATUS_CODE.BAD_REQUEST);
         }
 
         await this.deleteImageUseCase.execute({
@@ -24,9 +26,9 @@ export class DeleteImageController {
             ownerId: req.auth!.userId,
         });
 
-        res.status(200).json({
+        res.status(STATUS_CODE.OK).json({
             success: true,
-            message: "Image deleted successfully",
+            message: IMAGE_MESSAGES.IMAGE_DELETE_SUCCESS,
         });
     };
 }

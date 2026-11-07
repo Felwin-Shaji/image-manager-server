@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { IRegisterUserUseCase } from "../../../Application/Interfaces/UseCases/IRegisterUserUseCase";
+import { STATUS_CODE } from "../../../Application/Constants/HttpStatusCode";
+import { AUTH_MESSAGES } from "../../../Application/Constants/Messages/AuthMessages";
 
 export class RegisterUserController {
     constructor(
@@ -16,9 +18,9 @@ export class RegisterUserController {
 
 
 
-        res.status(201).json({
+        res.status(STATUS_CODE.CREATED).json({
             success: true,
-            message: "User registered successfully",
+            message: AUTH_MESSAGES.USER_REGISTERED_SUCCESS,
             data: result
         });
     };

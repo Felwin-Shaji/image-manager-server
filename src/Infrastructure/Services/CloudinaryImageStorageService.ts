@@ -4,6 +4,8 @@ import type {
     ImageStorageResult
 } from "../../Application/Interfaces/Services/IImageStorageService";
 import { AppError } from "../../Application/Errors/AppError";
+import { STATUS_CODE } from "../../Application/Constants/HttpStatusCode";
+import { IMAGE_MESSAGES } from "../../Application/Constants/Messages/ImageMessages";
 import env from "../Config/env";
 
 cloudinary.config({
@@ -43,7 +45,7 @@ export class CloudinaryImageStorageService implements IImageStorageService {
                 uploadStream.end(file);
             });
         } catch {
-            throw new AppError("Failed to upload image", 502);
+            throw new AppError(IMAGE_MESSAGES.FAILED_TO_UPLOAD_IMAGE, STATUS_CODE.BAD_GATEWAY);
         }
     }
 
@@ -57,7 +59,7 @@ export class CloudinaryImageStorageService implements IImageStorageService {
                 throw new Error("Cloudinary deletion failed");
             }
         } catch {
-            throw new AppError("Failed to delete image", 502);
+            throw new AppError(IMAGE_MESSAGES.FAILED_TO_DELETE_IMAGE, STATUS_CODE.BAD_GATEWAY);
         }
     }
 }

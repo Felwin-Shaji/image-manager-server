@@ -1,5 +1,8 @@
 
 import { AppError } from "../../Errors/AppError";
+import { STATUS_CODE } from "../../Constants/HttpStatusCode";
+import { AUTH_MESSAGES } from "../../Constants/Messages/AuthMessages";
+import { USER_MESSAGES } from "../../Constants/Messages/UserMessages";
 import type { IUserRepository } from "../../Interfaces/Repositories/IUserRepository";
 import type { IJwtService } from "../../Interfaces/Services/IJwtService";
 import type { IRefreshTokenUseCase } from "../../Interfaces/UseCases/IRefreshTokenUseCase";
@@ -13,7 +16,7 @@ export class RefreshTokenUseCase implements IRefreshTokenUseCase {
 
     async execute(refreshToken: string): Promise<RefreshTokenOutputDTO> {
         if (!refreshToken.trim()) {
-            throw new AppError("Refresh token is required", 401);
+            throw new AppError(AUTH_MESSAGES.REFRESH_TOKEN_REQUIRED, STATUS_CODE.UNAUTHORIZED);
         }
 
         let payload: { userId: string };
@@ -21,13 +24,13 @@ export class RefreshTokenUseCase implements IRefreshTokenUseCase {
         try {
             payload = this.jwtService.verifyRefreshToken(refreshToken);
         } catch {
-            throw new AppError("Invalid or expired refresh token", 401);
+            throw new AppError(AUTH_MESSAGES.INVALID_OR_EXPIRED_REFRESH_TOKEN, STATUS_CODE.UNAUTHORIZED);
         }
 
         const user = await this.userRepository.findById(payload.userId);
 
         if (!user || !user.id) {
-            throw new AppError("User not found", 401);
+            throw new AppError(USER_MESSAGES.USER_NOT_FOUND, STATUS_CODE.UNAUTHORIZED);
         }
 
         return {
