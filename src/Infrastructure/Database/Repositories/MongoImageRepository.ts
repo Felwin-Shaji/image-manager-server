@@ -134,20 +134,20 @@ export class MongoImageRepository implements IImageRepository {
         createdAt?: Date;
         updatedAt?: Date;
     }): Image {
-        return new Image({
-            id: document._id.toString(),
-            ownerId: document.ownerId.toString(),
-            title: document.title,
-            publicId: document.publicId,
-            secureUrl: document.secureUrl,
-            format: document.format,
-            bytes: document.bytes,
-            width: document.width,
-            height: document.height,
-            order: document.order,
-            createdAt: document.createdAt,
-            updatedAt: document.updatedAt,
-        });
+        return new Image(
+            document._id.toString(),
+            document.ownerId.toString(),
+            document.title,
+            document.publicId,
+            document.secureUrl,
+            document.format,
+            document.bytes,
+            document.width,
+            document.height,
+            document.order,
+            document.createdAt,
+            document.updatedAt,
+        );
     }
 
 }

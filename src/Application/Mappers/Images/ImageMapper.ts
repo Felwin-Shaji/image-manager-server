@@ -10,18 +10,18 @@ export class ImageMapper {
         order: number;
         storageResult: ImageStorageResult;
     }): Image {
-        return new Image({
-            id: null,
-            ownerId: input.ownerId,
-            title: input.title,
-            publicId: input.storageResult.publicId,
-            secureUrl: input.storageResult.secureUrl,
-            format: input.storageResult.format,
-            bytes: input.storageResult.bytes,
-            width: input.storageResult.width,
-            height: input.storageResult.height,
-            order: input.order,
-        });
+        return new Image(
+            null,
+            input.ownerId,
+            input.title,
+            input.storageResult.publicId,
+            input.storageResult.secureUrl,
+            input.storageResult.format,
+            input.storageResult.bytes,
+            input.storageResult.width,
+            input.storageResult.height,
+            input.order,
+        );
     }
 
     static toOutputDTO(image: Image & { id: string }): ImageOutputDTO {

@@ -23,12 +23,12 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
 
         const hashedPassword = await this.passwordService.hash(input.password);
 
-        const user = new User({
-            id: null,
+        const user = new User(
+            null,
             email,
             phone,
-            password: hashedPassword
-        });
+            hashedPassword
+        );
 
         const createdUser = await this.userRepository.create(user);
 
